@@ -1,0 +1,281 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  address     String                  @id @db.VarChar
+  updatedDate DateTime?               @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate DateTime                @default(now()) @map("created_date") @db.Timestamptz(3)
+  email       String?                 @db.VarChar
+  kycSessions KycVeriffSession[]
+  launchpads  LaunchpadParticipant[]
+  launchpools LaunchpoolParticipant[]
+
+  @@map("user")
+}
+
+model Transaction {
+  id        String          @id @default(uuid()) @db.Uuid
+  address   String          @db.VarChar
+  txHash    String          @map("tx_hash")
+  kind      TransactionKind
+  amount    Decimal         @db.Decimal(80, 2)
+  date      DateTime        @db.Timestamptz(3)
+  projectId String?         @db.Uuid
+
+  @@map("transaction")
+}
+
+model Project {
+  id               String      @id @default(uuid()) @db.Uuid
+  updatedDate      DateTime?   @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate      DateTime    @default(now()) @map("created_date") @db.Timestamptz(3)
+  name             String      @db.VarChar
+  description      String      @db.VarChar
+  shortDescription String      @map("short_description") @db.VarChar
+  banner           String      @db.VarChar
+  logo             String      @db.VarChar
+  socials          Json
+  metadata         Json
+  marketMaker      String      @map("market_marker")
+  tags             String[]    @db.VarChar
+  launchpad        Launchpad?
+  launchpool       Launchpool?
+  token            TokenInfo?
+
+  @@map("project")
+}
+
+model IdoForm {
+  id                 String    @id @default(uuid()) @db.Uuid
+  name               String    @db.VarChar
+  website            String    @db.VarChar
+  shortDescription   String    @map("short_description") @db.VarChar
+  whitepaper         String    @db.VarChar
+  tokenomicsLink     String    @map("tokenomics_link") @db.VarChar
+  smartContractAudit String    @map("smart_contract_audit") @db.VarChar
+  contactEmail       String    @map("contact_email") @db.VarChar
+  teamMember         String    @map("team_member") @db.VarChar
+  telegram           String    @db.VarChar
+  developmentStage   String    @map("development_stage") @db.VarChar
+  roadmap            String    @db.VarChar
+  previousFunding    String    @map("previous_funding") @db.VarChar
+  choiceReason       String    @map("choice_reason") @db.VarChar
+  additionalComment  String    @map("additional_comment") @db.VarChar
+  status             IdoStatus @default(pending)
+
+  @@map("ido_form")
+}
+
+model TokenInfo {
+  projectId   String  @id @map("project_id") @db.Uuid
+  address     String
+  price       Decimal @db.Decimal(80, 2) // price set by amin
+  name        String  @db.VarChar
+  symbol      String  @db.VarChar
+  totalSupply String  @map("total_supply") @db.VarChar
+  icon        String? @db.VarChar
+  project     Project @relation(fields: [projectId], references: [id])
+
+  @@map("token_info")
+}
+
+model Launchpad {
+  projectId      String      @id @map("project_id") @db.Uuid
+  updatedDate    DateTime?   @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate    DateTime    @default(now()) @map("created_date") @db.Timestamptz(3)
+  startDate      DateTime    @map("start_date") @db.Timestamptz(3)
+  snapshotDate   DateTime    @map("snapshot_date") @db.Timestamptz(3)
+  autoInvestDate DateTime    @map("auto_invest_date") @db.Timestamptz(3)
+  vestingDate    DateTime    @map("vesting_date") @db.Timestamptz(3)
+  snappedDate    DateTime?   @map("snapped_date") @db.Timestamptz(3)
+  unlockPercent  Int         @map("unlock_percent") // *100
+  percents       Int[] // *100
+  times          Decimal[]   @db.Decimal(80, 2) // timstamp seconds []
+  tge            Decimal     @db.Decimal(80, 2) // timstamp seconds
+  cliffTime      Decimal     @map("cliff_time") @db.Decimal(80, 2) // duration of seconds
+  linearTime     Decimal     @map("linear_time") @db.Decimal(80, 2) // duration of seconds
+  tokenOffer     Decimal     @map("token_offer") @db.Decimal(80, 2) // wei
+  tokenPrice     Decimal     @map("token_price") @db.Decimal(80, 2) // wei
+  totalRaise     Decimal     @map("token_raise") @db.Decimal(80, 2) // wei
+  ticketSize     Decimal     @map("ticket_size") @db.Decimal(80, 2) // wei
+  vestingType    VestingType @map("vesting_type")
+  autoInvest     Boolean     @default(false) @map("auto_invest")
+  vesting        Boolean     @default(false)
+  finished       Boolean     @default(false)
+
+  project      Project                @relation(fields: [projectId], references: [id])
+  participants LaunchpadParticipant[]
+  snapshots    LaunchpadSnapshot[]
+
+  @@map("launchpad")
+}
+
+model Launchpool {
+  projectId      String      @id @map("project_id") @db.Uuid
+  updatedDate    DateTime?   @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate    DateTime    @default(now()) @map("created_date") @db.Timestamptz(3)
+  startDate      DateTime    @map("start_date") @db.Timestamptz(3)
+  snapshotDate   DateTime    @map("snapshot_date") @db.Timestamptz(3)
+  autoInvestDate DateTime    @map("auto_invest_date") @db.Timestamptz(3)
+  vestingDate    DateTime    @map("vesting_date") @db.Timestamptz(3)
+  snappedDate    DateTime?   @map("snapped_date") @db.Timestamptz(3)
+  unlockPercent  Int         @map("unlock_percent")
+  percents       Int[]
+  times          Decimal[]   @db.Decimal(80, 2)
+  tge            Decimal     @db.Decimal(80, 2)
+  cliffTime      Decimal     @map("cliff_time") @db.Decimal(80, 2)
+  linearTime     Decimal     @map("linear_time") @db.Decimal(80, 2)
+  tokenReward    Decimal     @map("token_reward") @db.Decimal(80, 2)
+  totalAirdrop   Decimal     @map("total_airdrop") @db.Decimal(80, 2)
+  vestingType    VestingType @map("vesting_type")
+
+  project      Project                 @relation(fields: [projectId], references: [id])
+  participants LaunchpoolParticipant[]
+
+  @@map("launchpool")
+}
+
+model LaunchpadParticipant {
+  participantAddress String    @map("participant_address") @db.VarChar
+  projectId          String    @map("project_id") @db.Uuid
+  applyDate          DateTime  @default(now()) @map("apply_date") @db.Timestamptz(3)
+  launchpad          Launchpad @relation(fields: [projectId], references: [projectId])
+  participant        User      @relation(fields: [participantAddress], references: [address])
+
+  @@id([participantAddress, projectId])
+  @@map("launchpad_participant")
+}
+
+model LaunchpoolParticipant {
+  participantAddress String     @map("participant_address") @db.VarChar
+  projectId          String     @map("project_id") @db.Uuid
+  applyDate          DateTime   @default(now()) @map("apply_date") @db.Timestamptz(3)
+  launchpool         Launchpool @relation(fields: [projectId], references: [projectId])
+  participant        User       @relation(fields: [participantAddress], references: [address])
+
+  @@id([participantAddress, projectId])
+  @@map("launchpool_participant")
+}
+
+model StakedPool {
+  id          String    @id //id onchain
+  updatedDate DateTime? @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate DateTime  @default(now()) @map("created_date") @db.Timestamptz(3)
+  endTime     DateTime  @db.Timestamptz(3)
+  staker      String
+  lookup      Int
+  point       Decimal   @db.Decimal(80, 2)
+  amount      Decimal   @db.Decimal(80, 2)
+
+  @@map("staked_pool")
+}
+
+model VestingPool {
+  id        String @id //id onchain
+  projectId String @unique @map("project_id") @db.Uuid
+
+  @@map("vesting_pool")
+}
+
+model LaunchpadSnapshot {
+  id             String    @id @default(uuid()) @db.Uuid
+  updatedDate    DateTime? @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate    DateTime  @default(now()) @map("created_date") @db.Timestamptz(3)
+  projectId      String    @map("project_id") @db.Uuid
+  user           String
+  investedAmount Decimal   @map("invested_amount") @db.Decimal(80, 2)
+  tokenReceived  Decimal   @map("token_received") @db.Decimal(80, 2)
+  launchpad      Launchpad @relation(fields: [projectId], references: [projectId])
+
+  @@unique([projectId, user])
+  @@map("launchpad_snapshot")
+}
+
+model StreamEvent {
+  id           Int           @id @default(autoincrement())
+  updatedDate  DateTime?     @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate  DateTime      @default(now()) @map("created_date") @db.Timestamptz(3)
+  txHash       String        @map("tx_hash")
+  payload      Json
+  context      StreamContext
+  errorMessage String?       @map("error_message")
+  isFailure    Boolean       @default(false) @map("is_failure")
+
+  @@map("stream_event")
+}
+
+model Setting {
+  key   String @id @db.VarChar
+  value String @db.VarChar
+
+  @@map("setting")
+}
+
+model KycVeriffSession {
+  sessionId    String    @id @map("session_id") @db.VarChar
+  address      String    @db.VarChar
+  sessionUrl   String    @map("session_url") @db.VarChar
+  sessionToken String    @map("session_token") @db.VarChar
+  kycStatus    KycStatus @map("kyc_status")
+  reason       String?   @map("reason") @db.VarChar
+  updatedDate  DateTime? @updatedAt @map("updated_date") @db.Timestamptz(3)
+  createdDate  DateTime  @default(now()) @map("created_date") @db.Timestamptz(3)
+  user         User      @relation(fields: [address], references: [address])
+
+  @@map("kyc_veriff_sessions")
+}
+
+enum TransactionKind {
+  deposit
+  withdraw
+  claim_fund
+
+  @@map("transaction_kind")
+}
+
+enum StreamContext {
+  deposit
+  withdraw
+  stake
+  unstake
+  create_vesting_pool
+  claim_fund
+
+  @@map("stream_context")
+}
+
+enum VestingType {
+  VESTING_TYPE_MILESTONE_CLIFF_FIRST
+  VESTING_TYPE_MILESTONE_UNLOCK_FIRST
+  VESTING_TYPE_LINEAR_UNLOCK_FIRST
+  VESTING_TYPE_LINEAR_CLIFF_FIRST
+
+  @@map("vesting_type")
+}
+
+enum IdoStatus {
+  pending
+  rejected
+  approved
+
+  @@map("project_status")
+}
+
+enum KycStatus {
+  NOT_STARTED
+  STARTED
+  SUBMITTED
+  REVIEW
+  APPROVED
+  DECLINED
+  RESUBMISSION_REQUESTED
+  EXPIRED
+
+  @@map("kyc_status")
+}
