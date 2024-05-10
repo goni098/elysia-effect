@@ -1,4 +1,4 @@
-import { HttpError } from "@root/errors/http/HttpError";
+import type { HttpError } from "@root/errors/http/HttpError";
 
 export type RuntimeError = {
   readonly _tag: string;

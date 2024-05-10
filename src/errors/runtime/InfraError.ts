@@ -1,8 +1,10 @@
+import { Effect, pipe } from "effect";
+
+import type { RuntimeError } from "@root/types/RuntimeError";
 import { intoError } from "@root/utils/into-error";
 import { retrieveErrorMessage } from "@root/utils/retrieve-error-message";
-import { Effect, pipe } from "effect";
+
 import { HttpError } from "../http/HttpError";
-import { RuntimeError } from "@root/types/RuntimeError";
 
 export class InfraError implements RuntimeError {
   readonly _tag = "InfraError";

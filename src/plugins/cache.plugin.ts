@@ -21,12 +21,9 @@ export const autoCachingPlugin = new Elysia({
   .use(cachePlugin())
   .onRequest(async ({ memory, request }) => {
     const key = toBase64(request.url);
-
     const value = await memory.get(key);
 
-    if (!isNill(value)) {
-      return value;
-    }
+    if (!isNill(value)) return value;
   })
   .onAfterHandle({ as: "scoped" }, async ({ request, memory, response }) => {
     const key = toBase64(request.url);

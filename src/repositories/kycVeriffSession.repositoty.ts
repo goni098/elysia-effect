@@ -1,8 +1,8 @@
 import type { KycStatus } from "@prisma/client";
-import { DatabaseError } from "@root/errors/DatabaseError";
-
-import { prisma } from "@root/shared/prisma";
 import { Effect } from "effect";
+
+import { DatabaseError } from "@root/errors/DatabaseError";
+import { prisma } from "@root/shared/prisma";
 
 type CreateKycVeriffSessionParams = {
   address: string;

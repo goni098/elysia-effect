@@ -1,8 +1,8 @@
 import Queue from "bull";
+import { Effect, Either, pipe } from "effect";
 import Elysia from "elysia";
 
 import { intoError } from "@root/utils/into-error";
-import { Effect, Either, pipe } from "effect";
 
 type Queues = Readonly<{
   email: ["send_r_mail", "send_t_mail"];

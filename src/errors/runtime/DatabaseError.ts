@@ -1,8 +1,10 @@
-import { intoError } from "@root/utils/into-error";
 import { Either, Option, pipe } from "effect";
-import { HttpError } from "../http/HttpError";
+
+import type { RuntimeError } from "@root/types/RuntimeError";
+import { intoError } from "@root/utils/into-error";
 import { retrieveErrorMessage } from "@root/utils/retrieve-error-message";
-import { RuntimeError } from "@root/types/RuntimeError";
+
+import { HttpError } from "../http/HttpError";
 
 export class DatabaseError implements RuntimeError {
   readonly _tag = "DatabaseError";

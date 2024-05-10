@@ -1,8 +1,8 @@
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
-import { errorPlugin } from "./plugins/error.plugin";
 import { admin, general, project, user } from "./apis";
+import { errorPlugin } from "./plugins/error.plugin";
 
 const app = new Elysia()
   .use(
