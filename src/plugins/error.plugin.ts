@@ -1,26 +1,15 @@
-import { ForbiddenError } from "@root/errors/encoded-http/ForbiddenError";
-import { UnauthorizedError } from "@root/errors/encoded-http/UnauthorizedError";
+import { HttpError } from "@root/errors/http/HttpError";
 import Elysia from "elysia";
 
 export const errorPlugin = new Elysia({
   name: "Plugin.Error"
 })
   .error({
-    UnauthorizedError: UnauthorizedError,
-    ForbiddenError: ForbiddenError
+    HttpError: HttpError
   })
   .onError(({ code, set, error }) => {
-    switch (code) {
-      case "UnauthorizedError":
-        set.status = 401;
-        break;
-
-      case "ForbiddenError":
-        set.status = 403;
-        break;
-
-      default:
-        break;
+    if (code === "HttpError") {
+      set.status = error.code;
     }
 
     return {

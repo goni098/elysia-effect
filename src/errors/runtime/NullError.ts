@@ -1,12 +1,12 @@
-import { InternalServerError } from "elysia";
-import { AnyHow } from "..";
+import { RuntimeError } from "@root/types/RuntimeError";
+import { HttpError } from "../http/HttpError";
 
-export class NullError implements AnyHow {
+export class NullError implements RuntimeError {
   readonly _tag = "NullError";
 
-  constructor(private msg: string) {}
+  constructor(private message: string) {}
 
-  encodeHttp(): Error {
-    return new InternalServerError(this.msg);
+  encodeHttp(): HttpError {
+    return HttpError.Internal(this.message);
   }
 }
