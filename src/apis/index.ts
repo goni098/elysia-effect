@@ -3,6 +3,13 @@ import Elysia from "elysia";
 import { ENDPOINT } from "@root/shared/constant";
 
 import { me } from "./user/me";
+import { changeProjectStatus } from "./admin/change-project-status";
+import { createProject } from "./admin/create-project";
+import { getIdoForms } from "./admin/get-ido-forms";
+import { getProjectSnapshots } from "./admin/get-project-snapshots";
+import { updateProject } from "./admin/update-project";
+import { authPlugin } from "@root/plugins/auth.plugin";
+import { adminAuthPlugin } from "@root/plugins/admin-auth.plugin";
 
 export const user = new Elysia({
   name: "Controller.User",
@@ -20,7 +27,19 @@ export const project = new Elysia({
   }
 });
 
-export const admin = new Elysia({ name: "Controller.Admin" });
+export const admin = new Elysia({
+  name: "Controller.Admin",
+  prefix: "admin",
+  detail: {
+    tags: ["Admin"]
+  }
+})
+  .use(adminAuthPlugin)
+  .use(changeProjectStatus)
+  .use(createProject)
+  .use(getIdoForms)
+  .use(getProjectSnapshots)
+  .use(updateProject);
 
 export const kyc = new Elysia({ name: "Controller.Kyc" });
 

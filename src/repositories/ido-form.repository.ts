@@ -1,6 +1,7 @@
-import type { GetIdoFormsQuery } from "@root/modules/admin/parsers/getIdoForms";
-import type { SubmitIdoFormPayload } from "@root/modules/project/parsers/submitIdoForm";
+import { GetIdoFormsParams } from "@root/apis/admin/get-ido-forms";
+import { DatabaseError } from "@root/errors";
 import { prisma } from "@root/shared/prisma";
+import { Effect } from "effect";
 
 export abstract class IdoFormRepository {
   static create(payload: SubmitIdoFormPayload) {
@@ -24,20 +25,24 @@ export abstract class IdoFormRepository {
     });
   }
 
-  static findPaged({ page, take, status }: GetIdoFormsQuery) {
-    return Promise.all([
-      prisma.idoForm.findMany({
-        where: {
-          status
-        },
-        take,
-        skip: (page - 1) * take
-      }),
-      prisma.idoForm.count({
-        where: {
-          status
-        }
-      })
-    ]);
+  static find({ page, take, status }: GetIdoFormsParams) {
+    return Effect.tryPromise({
+      catch: error => new DatabaseError(error),
+      try: () =>
+        Promise.all([
+          prisma.idoForm.findMany({
+            where: {
+              status
+            },
+            take,
+            skip: (page - 1) * take
+          }),
+          prisma.idoForm.count({
+            where: {
+              status
+            }
+          })
+        ])
+    });
   }
 }

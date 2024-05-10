@@ -1,6 +1,6 @@
 import Elysia from "elysia";
 
-import { HttpError } from "@root/errors/http/HttpError";
+import { HttpError } from "@root/errors/HttpError";
 
 export const errorPlugin = new Elysia({
   name: "Plugin.Error"

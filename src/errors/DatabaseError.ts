@@ -1,17 +1,17 @@
-import { Either, Option, pipe } from "effect";
+import { pipe } from "effect";
 
-import type { RuntimeError } from "@root/types/RuntimeError";
 import { intoError } from "@root/utils/into-error";
 import { retrieveErrorMessage } from "@root/utils/retrieve-error-message";
 
-import { HttpError } from "../http/HttpError";
+import { AppError } from "@root/types/AppError";
+import { HttpError } from "./HttpError";
 
-export class DatabaseError implements RuntimeError {
+export class DatabaseError implements AppError {
   readonly _tag = "DatabaseError";
 
   constructor(private error: unknown) {}
 
-  encodeHttp(): HttpError {
+  public encodeHttp(): HttpError {
     console.error("DatabaseError: ", this.error);
     return pipe(
       this.error,

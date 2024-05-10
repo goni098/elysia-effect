@@ -1,6 +1,8 @@
 import type { Address } from "viem";
 
 import { prisma } from "@root/shared/prisma";
+import { Effect } from "effect";
+import { DatabaseError } from "@root/errors";
 
 type CreateLaunchpadSnapshotParams = {
   projectId: string;
@@ -38,10 +40,14 @@ export abstract class LaunchpadSnapshotRepository {
   }
 
   static findAllByProjectId(projectId: string) {
-    return prisma.launchpadSnapshot.findMany({
-      where: {
-        projectId
-      }
+    return Effect.tryPromise({
+      catch: error => new DatabaseError(error),
+      try: () =>
+        prisma.launchpadSnapshot.findMany({
+          where: {
+            projectId
+          }
+        })
     });
   }
 }

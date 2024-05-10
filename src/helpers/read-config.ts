@@ -1,4 +1,4 @@
-export const readConfigOrDie = (config: string) => {
+export const readConfigOrExit = <T extends string>(config: string) => {
   const c = process.env[config];
 
   if (!c) {
@@ -6,5 +6,5 @@ export const readConfigOrDie = (config: string) => {
     process.exit(1);
   }
 
-  return c;
+  return c as T;
 };

@@ -2,9 +2,10 @@ import type { Prisma } from "@prisma/client";
 import { DateTime } from "luxon";
 import type { Address } from "viem";
 
-import type { ChangeProjectStatusPayload } from "@root/modules/admin/parsers/changeProjectStatus";
-import type { PaginatedQuery } from "@root/shared/parser";
 import { prisma } from "@root/shared/prisma";
+import { Effect } from "effect";
+import { DatabaseError } from "@root/errors";
+import { ChangeProjectStatusPayload } from "@root/apis/admin/change-project-status";
 
 export abstract class LaunchpadRepository {
   static findByProjectId(projectId: string) {
@@ -19,15 +20,19 @@ export abstract class LaunchpadRepository {
     projectId: string,
     { autoInvest, vesting, finished }: ChangeProjectStatusPayload
   ) {
-    return prisma.launchpad.update({
-      where: {
-        projectId
-      },
-      data: {
-        autoInvest,
-        vesting,
-        finished
-      }
+    return Effect.tryPromise({
+      catch: error => new DatabaseError(error),
+      try: () =>
+        prisma.launchpad.update({
+          where: {
+            projectId
+          },
+          data: {
+            autoInvest,
+            vesting,
+            finished
+          }
+        })
     });
   }
 

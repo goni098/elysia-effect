@@ -1,4 +1,6 @@
+import { DatabaseError } from "@root/errors";
 import { prisma } from "@root/shared/prisma";
+import { Effect } from "effect";
 
 export abstract class VestingPoolRepository {
   static create(poolId: string, projectId: string) {
@@ -19,10 +21,14 @@ export abstract class VestingPoolRepository {
   }
 
   static findByProjectId(projectId: string) {
-    return prisma.vestingPool.findUnique({
-      where: {
-        projectId
-      }
+    return Effect.tryPromise({
+      catch: error => new DatabaseError(error),
+      try: () =>
+        prisma.vestingPool.findUnique({
+          where: {
+            projectId
+          }
+        })
     });
   }
 }

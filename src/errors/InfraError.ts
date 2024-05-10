@@ -1,17 +1,17 @@
-import { Effect, pipe } from "effect";
+import { pipe } from "effect";
 
-import type { RuntimeError } from "@root/types/RuntimeError";
 import { intoError } from "@root/utils/into-error";
 import { retrieveErrorMessage } from "@root/utils/retrieve-error-message";
 
-import { HttpError } from "../http/HttpError";
+import { AppError } from "@root/types/AppError";
+import { HttpError } from "./HttpError";
 
-export class InfraError implements RuntimeError {
+export class InfraError implements AppError {
   readonly _tag = "InfraError";
 
   constructor(private error: unknown) {}
 
-  encodeHttp(): HttpError {
+  public encodeHttp(): HttpError {
     console.error("InfraError: ", this.error);
     return pipe(
       this.error,
