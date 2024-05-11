@@ -40,7 +40,7 @@ async function run() {
   while (true) {
     try {
       blockNumber = await scan(blockNumber);
-      await sleep(3000);
+      await sleep(10_000);
     } catch (error) {
       console.error(`Failed to handle block: ${blockNumber.toString()}`);
       console.error(error);
@@ -54,6 +54,8 @@ async function scan(blockNumber: bigint) {
   if (latestBlock.number <= blockNumber) {
     return blockNumber;
   }
+
+  console.log("latestBlock: ", latestBlock.number);
 
   const events = await viemClient.getLogs({
     address: [DEPOSIT_CONTRACT, STAKING_CONTRACT, VESTING_CONTRACT],
@@ -174,4 +176,4 @@ async function handleMissingClaimEvent(event: ClaimFundEvent) {
   await VestingEventService.handleClaimEvent(event);
 }
 
-run();
+await run();

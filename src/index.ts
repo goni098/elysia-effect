@@ -16,10 +16,6 @@ const app = new Elysia()
           title: "Purr APIs documentation",
           version: "1.0.50"
         }
-      },
-      scalarConfig: {
-        layout: "modern",
-        metaData: {}
       }
     })
   )

@@ -65,4 +65,4 @@ function run() {
   return Promise.resolve(void 0);
 }
 
-run();
+await run();

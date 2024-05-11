@@ -10,7 +10,7 @@ export const project = new Elysia({
   name: "Controller.Project",
   prefix: "projects",
   detail: {
-    tags: ["Auth"]
+    tags: ["Project"]
   }
 })
   .use(applyLaunchpad)
