@@ -1,5 +1,5 @@
-import { Address } from "viem";
+import type { Address } from "viem";
 
-export type Claims = {
+export type Claims = Readonly<{
   address: Address;
-};
+}>;

@@ -3,7 +3,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 import type { DateTime } from "luxon";
 import type { Address } from "viem";
 
-import type { PaginatedQuery } from "@root/shared/parser";
+import type { PagedParams } from "@root/shared/parser";
 import { prisma } from "@root/shared/prisma";
 
 type CreateDepositTxParams = {
@@ -76,7 +76,7 @@ export abstract class TransactionRepository {
   static async findPagedClaimByUserAndProject(
     user: Address,
     projectId: string,
-    { page, take }: PaginatedQuery
+    { page, take }: PagedParams
   ) {
     const filter: Prisma.TransactionWhereInput = {
       address: user,

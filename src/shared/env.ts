@@ -1,6 +1,7 @@
-import { readConfigOrExit } from "@root/helpers/read-config";
 import type { Address } from "viem";
 import { bsc, bscTestnet } from "viem/chains";
+
+import { readConfigOrExit } from "@root/helpers/read-config";
 
 export const ACCESS_TOKEN_SECRET = readConfigOrExit("ACCESS_TOKEN_SECRET");
 

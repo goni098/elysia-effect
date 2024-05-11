@@ -2,10 +2,9 @@ import type { Prisma } from "@prisma/client";
 import { DateTime } from "luxon";
 import type { Address } from "viem";
 
+import type { ChangeProjectStatusPayload } from "@root/apis/admin/change-project-status";
+import type { PagedParams } from "@root/shared/parser";
 import { prisma } from "@root/shared/prisma";
-import { Effect } from "effect";
-import { DatabaseError } from "@root/errors";
-import { ChangeProjectStatusPayload } from "@root/apis/admin/change-project-status";
 
 export abstract class LaunchpadRepository {
   static findByProjectId(projectId: string) {
@@ -20,19 +19,15 @@ export abstract class LaunchpadRepository {
     projectId: string,
     { autoInvest, vesting, finished }: ChangeProjectStatusPayload
   ) {
-    return Effect.tryPromise({
-      catch: error => new DatabaseError(error),
-      try: () =>
-        prisma.launchpad.update({
-          where: {
-            projectId
-          },
-          data: {
-            autoInvest,
-            vesting,
-            finished
-          }
-        })
+    return prisma.launchpad.update({
+      where: {
+        projectId
+      },
+      data: {
+        autoInvest,
+        vesting,
+        finished
+      }
     });
   }
 
@@ -58,10 +53,7 @@ export abstract class LaunchpadRepository {
     });
   }
 
-  static async findAppliedByUser(
-    user: Address,
-    { page, take }: PaginatedQuery
-  ) {
+  static async findAppliedByUser(user: Address, { page, take }: PagedParams) {
     const filter: Prisma.LaunchpadWhereInput = {
       participants: {
         some: {
@@ -101,10 +93,7 @@ export abstract class LaunchpadRepository {
     return { launchpads, total };
   }
 
-  static async findInvestedByUser(
-    user: Address,
-    { page, take }: PaginatedQuery
-  ) {
+  static async findInvestedByUser(user: Address, { page, take }: PagedParams) {
     const filter: Prisma.LaunchpadWhereInput = {
       snapshots: {
         some: {
@@ -113,7 +102,8 @@ export abstract class LaunchpadRepository {
             gt: 0
           }
         }
-      }
+      },
+      autoInvest: true
     };
 
     const [launchpads, total] = await Promise.all([

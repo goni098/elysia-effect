@@ -1,10 +1,12 @@
-export const readConfigOrExit = <T extends string>(config: string) => {
-  const c = process.env[config];
+export const readConfigOrExit = <T extends string = string>(
+  config: string
+): T => {
+  const value = process.env[config];
 
-  if (!c) {
-    console.error(`Missing ${config} env config`);
+  if (!value) {
+    console.error(`missing config ${config}`);
     process.exit(1);
   }
 
-  return c as T;
+  return value as T;
 };

@@ -1,4 +1,4 @@
-import type { Launchpad } from "@prisma/client";
+import type { Launchpad, Launchpool } from "@prisma/client";
 import { DateTime } from "luxon";
 
 export const retrieveLaunchStatus = ({
@@ -34,6 +34,25 @@ export const retrieveLaunchStatus = ({
   }
 
   return "snapped";
+};
+
+export const retrieveSaleType = (
+  launchpad: Launchpad | null,
+  launchpool: Launchpool | null
+) => {
+  if (launchpad && launchpool) {
+    return "launchpad && launchpool";
+  }
+
+  if (launchpad) {
+    return "launchpad";
+  }
+
+  if (launchpool) {
+    return "launchpool";
+  }
+
+  return "none";
 };
 
 type Status =

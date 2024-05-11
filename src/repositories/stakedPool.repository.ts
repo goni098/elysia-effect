@@ -3,7 +3,7 @@ import type { Decimal } from "@prisma/client/runtime/library";
 import type { DateTime } from "luxon";
 import type { Address } from "viem";
 
-import type { PaginatedQuery } from "@root/shared/parser";
+import type { PagedParams } from "@root/shared/parser";
 import { prisma } from "@root/shared/prisma";
 
 type CreatePoolParams = {
@@ -58,7 +58,7 @@ export abstract class StakedPoolRepository {
     });
   }
 
-  static async findPagedByUser(user: Address, { page, take }: PaginatedQuery) {
+  static async findPagedByUser(user: Address, { page, take }: PagedParams) {
     const filter: Prisma.StakedPoolWhereInput = {
       staker: user
     };

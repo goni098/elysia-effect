@@ -1,5 +1,4 @@
 import Queue from "bull";
-import { Effect, Either, pipe } from "effect";
 import Elysia from "elysia";
 
 import { intoError } from "@root/utils/into-error";
@@ -24,22 +23,14 @@ export const bullPlugin = <T extends keyof Queues>({
 }: QueueConfig<T>) => {
   const queue = new Queue(name, opts);
 
-  queue.process(job, async (job, done) =>
-    pipe(
-      Effect.tryPromise({
-        catch: intoError,
-        try: () => consumer(job)
-      }),
-      Effect.as(undefined),
-      Effect.either,
-      Effect.runPromise
-    ).then(
-      Either.match({
-        onLeft: done,
-        onRight: done
-      })
-    )
-  );
+  queue.process(job, async (job, done) => {
+    try {
+      await consumer(job);
+      done();
+    } catch (error) {
+      done(intoError(error));
+    }
+  });
 
   return new Elysia({
     name: "Plugin.Queue",

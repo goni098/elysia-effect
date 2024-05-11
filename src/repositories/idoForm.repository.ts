@@ -1,10 +1,9 @@
-import { GetIdoFormsParams } from "@root/apis/admin/get-ido-forms";
-import { DatabaseError } from "@root/errors";
+import type { GetIdoFormsParams } from "@root/apis/admin/get-ido-forms";
+import type { SubmitIdoPayload } from "@root/apis/project/submit-ido";
 import { prisma } from "@root/shared/prisma";
-import { Effect } from "effect";
 
 export abstract class IdoFormRepository {
-  static create(payload: SubmitIdoFormPayload) {
+  static create(payload: SubmitIdoPayload) {
     return prisma.idoForm.create({
       data: {
         name: payload.name,
@@ -26,23 +25,19 @@ export abstract class IdoFormRepository {
   }
 
   static find({ page, take, status }: GetIdoFormsParams) {
-    return Effect.tryPromise({
-      catch: error => new DatabaseError(error),
-      try: () =>
-        Promise.all([
-          prisma.idoForm.findMany({
-            where: {
-              status
-            },
-            take,
-            skip: (page - 1) * take
-          }),
-          prisma.idoForm.count({
-            where: {
-              status
-            }
-          })
-        ])
-    });
+    return Promise.all([
+      prisma.idoForm.findMany({
+        where: {
+          status
+        },
+        take,
+        skip: (page - 1) * take
+      }),
+      prisma.idoForm.count({
+        where: {
+          status
+        }
+      })
+    ]);
   }
 }

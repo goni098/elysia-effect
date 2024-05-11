@@ -1,5 +1,5 @@
 {
-  "name": "moonkit-be",
+  "name": "purr-be",
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch --env-file=.env.local src/index.ts",
@@ -12,21 +12,20 @@
     "release": "tsc --noEmit && bun run scripts/bundle.js"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.30.0",
     "@elysiajs/bearer": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
     "@elysiajs/swagger": "^1.0.5",
     "@prisma/client": "5.13.0",
-    "@solana/spl-token": "^0.4.6",
+    "@sinclair/typebox": "^0.32.29",
     "axios": "^1.6.8",
     "bull": "^4.12.2",
     "cache-manager": "^5.5.2",
-    "effect": "^3.1.3",
     "elysia": "latest",
     "firebase": "^10.11.1",
     "immutable": "^5.0.0-beta.5",
     "ioredis": "^5.4.1",
     "luxon": "^3.4.4",
+    "nodemailer": "^6.9.13",
     "uuid": "^9.0.1",
     "viem": "^2.10.2"
   },
@@ -34,6 +33,8 @@
     "@cspell/eslint-plugin": "^8.8.0",
     "@types/bull": "^4.10.0",
     "@types/luxon": "^3.4.2",
+    "@types/nodemailer": "^6.4.15",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "bun-types": "latest",

@@ -1,8 +1,9 @@
 import { VestingType } from "@prisma/client";
-import { consumeEffect } from "@root/helpers/consume-effect";
+import type { Static } from "elysia";
+import Elysia, { t } from "elysia";
+
 import { ProjectRepository } from "@root/repositories/project.repository";
-import { Effect, pipe } from "effect";
-import Elysia, { Static, t } from "elysia";
+import { thunk } from "@root/shared/thunk";
 
 export const socials = t.Object({
   twitter: t.String({ minLength: 1 }),
@@ -12,7 +13,7 @@ export const socials = t.Object({
 });
 
 export const token = t.Object({
-  address: t.String({ minLength: 1 }),
+  address: t.String({ format: "address" }),
   price: t.BigInt(),
   icon: t.String({ minLength: 1 }),
   name: t.String({ minLength: 1 }),
@@ -72,11 +73,6 @@ export type CreateProjectPayload = Static<typeof body>;
 
 export const createProject = new Elysia({
   name: "Handler.Admin.CreateProject"
-}).post(
-  "/projects",
-  ({ body }) =>
-    pipe(ProjectRepository.create(body), Effect.asVoid, consumeEffect),
-  {
-    body
-  }
-);
+}).post("/projects", ({ body }) => ProjectRepository.create(body).then(thunk), {
+  body
+});

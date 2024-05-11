@@ -1,10 +1,8 @@
 import type { Address } from "viem";
 
+import { STAKING_ABI } from "@root/contracts/staking.abi";
 import { STAKING_CONTRACT } from "@root/shared/env";
 import { viemClient } from "@root/shared/viem";
-import { STAKING_ABI } from "@root/contracts/staking.abi";
-import { Effect } from "effect";
-import { ViemError } from "@root/errors/ViemError";
 
 export abstract class StakingContractService {
   static getPendingReward(poolId: bigint) {
@@ -16,24 +14,21 @@ export abstract class StakingContractService {
     });
   }
 
-  static getUserStakedInfo(user: Address) {
-    return Effect.tryPromise({
-      catch: error => new ViemError(error),
-      try: () =>
-        viemClient.readContract({
-          abi: STAKING_ABI,
-          address: STAKING_CONTRACT,
-          functionName: "getUserTotalStaked",
-          args: [user]
-        })
-    }).pipe(
-      Effect.map(([totalStaked, totalPoint, totalReward, balance]) => ({
-        totalStaked,
-        totalPoint,
-        totalReward,
-        balance
-      }))
-    );
+  static async getUserStakedInfo(user: Address) {
+    const [totalStaked, totalPoint, totalReward, balance] =
+      await viemClient.readContract({
+        abi: STAKING_ABI,
+        address: STAKING_CONTRACT,
+        functionName: "getUserTotalStaked",
+        args: [user]
+      });
+
+    return {
+      totalStaked,
+      totalPoint,
+      totalReward,
+      balance
+    };
   }
 
   static async getTotalStakedPool() {

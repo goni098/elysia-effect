@@ -1,7 +1,8 @@
-import { consumeEffect } from "@root/helpers/consume-effect";
+import type { Static } from "elysia";
+import Elysia, { t } from "elysia";
+
 import { LaunchpadRepository } from "@root/repositories/launchpad.repository";
-import { Effect, pipe } from "effect";
-import Elysia, { Static, t } from "elysia";
+import { thunk } from "@root/shared/thunk";
 
 const body = t.Object({
   vesting: t.Optional(t.Boolean()),
@@ -16,14 +17,10 @@ export const changeProjectStatus = new Elysia({
 }).patch(
   "/projects/:project_id/change-status",
   ({ params, body }) =>
-    pipe(
-      LaunchpadRepository.changeStatus(params.project_id, body),
-      Effect.asVoid,
-      consumeEffect
-    ),
+    LaunchpadRepository.changeStatus(params.project_id, body).then(thunk),
   {
     params: t.Object({
-      project_id: t.String({ minLength: 1 })
+      project_id: t.String({ format: "uuid" })
     }),
     body
   }

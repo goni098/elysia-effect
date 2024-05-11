@@ -1,17 +1,19 @@
-import Elysia, { Static, t } from "elysia";
+import type { Static } from "elysia";
+import Elysia, { t } from "elysia";
+
+import { ProjectRepository } from "@root/repositories/project.repository";
+import { thunk } from "@root/shared/thunk";
+
 import {
+  body as createProjectPayload,
   launchpad,
   launchpool,
   socials,
-  token,
-  body as createProjectPayload
+  token
 } from "./create-project";
-import { Effect, pipe } from "effect";
-import { ProjectRepository } from "@root/repositories/project.repository";
-import { consumeEffect } from "@root/helpers/consume-effect";
 
 const body = t.Composite([
-  t.Omit(createProjectPayload, ["launchpad", "launchpool", "soicals", "token"]),
+  t.Omit(createProjectPayload, ["launchpad", "launchpool", "socials", "token"]),
   t.Object({
     launchpad: t.Optional(t.Partial(launchpad)),
     launchpool: t.Optional(t.Partial(launchpool)),
@@ -27,12 +29,11 @@ export const updateProject = new Elysia({
 }).patch(
   "/project/:project_id",
   ({ body, params }) =>
-    pipe(
-      ProjectRepository.update(params.project_id, body),
-      Effect.asVoid,
-      consumeEffect
-    ),
+    ProjectRepository.update(params.project_id, body).then(thunk),
   {
-    body
+    body,
+    params: t.Object({
+      project_id: t.String({ format: "uuid" })
+    })
   }
 );

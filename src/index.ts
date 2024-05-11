@@ -9,7 +9,7 @@ const app = new Elysia()
     swagger({
       documentation: {
         info: {
-          title: "Moonkit APIs documentation",
+          title: "Purr APIs documentation",
           version: "1.0.50"
         }
       },
@@ -27,5 +27,5 @@ const app = new Elysia()
   .listen(8080);
 
 console.log(
-  `🦊 Moonkit is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Purr is running at ${app.server?.hostname}:${app.server?.port}`
 );

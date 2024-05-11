@@ -1,14 +1,15 @@
-import { Launchpad, Launchpool } from "@prisma/client";
-import { consumeEffect } from "@root/helpers/consume-effect";
-import { retrieveLaunchStatus } from "@root/helpers/retrieveLaunchpadStatus";
+import type { Static } from "elysia";
+import Elysia, { t } from "elysia";
+
+import {
+  retrieveLaunchStatus,
+  retrieveSaleType
+} from "@root/helpers/retrieve-launchpad-status";
 import { ProjectRepository } from "@root/repositories/project.repository";
-import { pagedModel } from "@root/shared/model";
-import { exclude } from "@root/utils/exclude";
-import { Effect, pipe } from "effect";
-import Elysia, { Static, t } from "elysia";
+import { pagedParams } from "@root/shared/parser";
 
 const query = t.Composite([
-  pagedModel,
+  pagedParams,
   t.Object({
     status: t.Optional(
       t.Union([t.Literal("ongoing"), t.Literal("upcoming"), t.Literal("ended")])
@@ -22,72 +23,50 @@ export const getProjects = new Elysia({
   name: "Handler.Admin.GetProjects"
 }).get(
   "/project/:project_id",
-  ({ query }) =>
-    pipe(
-      ProjectRepository.find(query),
-      Effect.map(([nodes, total]) => {
-        const projects = nodes.map(project => {
-          const {
-            launchpad,
-            launchpool,
-            id,
-            name,
-            logo,
-            banner,
-            shortDescription,
-            tags,
-            marketMaker,
-            token
-          } = project;
+  async ({ query }) => {
+    const [nodes, total] = await ProjectRepository.findPaged(query);
 
-          const status = launchpad
-            ? retrieveLaunchStatus(launchpad)
-            : undefined;
+    const projects = nodes.map(project => {
+      const {
+        launchpad,
+        launchpool,
+        id,
+        name,
+        logo,
+        banner,
+        shortDescription,
+        tags,
+        marketMaker,
+        token
+      } = project;
 
-          return {
-            id,
-            name,
-            logo,
-            banner,
-            shortDescription,
-            tags,
-            saleType: saleType(launchpad, launchpool),
-            marketMaker,
-            token: exclude(token, ["projectId"]),
-            launchpool,
-            launchpad,
-            status
-          };
-        });
+      const status = launchpad ? retrieveLaunchStatus(launchpad) : undefined;
 
-        return {
-          total,
-          page: query.page,
-          nodes: projects
-        };
-      }),
-      consumeEffect
-    ),
+      const saleType = retrieveSaleType(launchpad, launchpool);
+
+      return {
+        id,
+        name,
+        logo,
+        banner,
+        shortDescription,
+        tags,
+        saleType: saleType,
+        marketMaker,
+        token,
+        launchpool,
+        launchpad,
+        status
+      };
+    });
+
+    return {
+      total,
+      page: query.page,
+      nodes: projects
+    };
+  },
   {
     query
   }
 );
-
-const saleType = (
-  launchpad: Launchpad | null,
-  launchpool: Launchpool | null
-) => {
-  if (launchpad && launchpool) {
-    return "launchpad && launchpool";
-  }
-
-  if (launchpad) {
-    return "launchpad";
-  }
-
-  if (launchpool) {
-    return "launchpool";
-  }
-
-  return "none";
-};

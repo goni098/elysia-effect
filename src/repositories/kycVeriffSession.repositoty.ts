@@ -1,7 +1,5 @@
 import type { KycStatus } from "@prisma/client";
-import { Effect } from "effect";
 
-import { DatabaseError } from "@root/errors/DatabaseError";
 import { prisma } from "@root/shared/prisma";
 
 type CreateKycVeriffSessionParams = {
@@ -22,32 +20,24 @@ export abstract class KycVeriffSessionRepository {
     kycStatus,
     reason
   }: CreateKycVeriffSessionParams) {
-    return Effect.tryPromise({
-      try: () =>
-        prisma.kycVeriffSession.create({
-          data: {
-            address,
-            sessionId,
-            sessionToken,
-            sessionUrl,
-            kycStatus,
-            reason
-          }
-        }),
-      catch: error => new DatabaseError(error)
+    return prisma.kycVeriffSession.create({
+      data: {
+        address,
+        sessionId,
+        sessionToken,
+        sessionUrl,
+        kycStatus,
+        reason
+      }
     });
   }
 
   static getLatestKycVeriffSessionByAddress(address: string) {
-    return Effect.tryPromise({
-      try: () =>
-        prisma.kycVeriffSession.findFirst({
-          where: { address },
-          orderBy: {
-            createdDate: "desc"
-          }
-        }),
-      catch: error => new DatabaseError(error)
+    return prisma.kycVeriffSession.findFirst({
+      where: { address },
+      orderBy: {
+        createdDate: "desc"
+      }
     });
   }
 

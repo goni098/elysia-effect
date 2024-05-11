@@ -1,15 +1,15 @@
 import jwt from "@elysiajs/jwt";
 
-import { JWT_ACCESS_SECRET, JWT_RENEW_SECRET } from "@root/shared/env";
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "@root/shared/env";
 
 export const accessJwt = jwt({
-  secret: JWT_ACCESS_SECRET,
+  secret: ACCESS_TOKEN_SECRET,
   exp: "3d",
   name: "access"
 });
 
 export const renewJwt = jwt({
-  secret: JWT_RENEW_SECRET,
+  secret: REFRESH_TOKEN_SECRET,
   exp: "1y",
   name: "renew"
 });
