@@ -1,7 +1,11 @@
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
-import { admin, general, project, user } from "./apis";
+import { admin } from "./apis/admin";
+import { general } from "./apis/general";
+import { kyc } from "./apis/kyc";
+import { project } from "./apis/project";
+import { user } from "./apis/user";
 import { errorPlugin } from "./plugins/error.plugin";
 
 const app = new Elysia()
@@ -23,6 +27,7 @@ const app = new Elysia()
   .use(admin)
   .use(user)
   .use(project)
+  .use(kyc)
   .use(errorPlugin)
   .listen(8080);
 
