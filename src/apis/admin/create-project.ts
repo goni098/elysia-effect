@@ -4,6 +4,7 @@ import Elysia, { t } from "elysia";
 
 import { ProjectRepository } from "@root/repositories/project.repository";
 import { thunk } from "@root/shared/thunk";
+import { UnionEnum } from "@root/shared/parser";
 
 export const socials = t.Object({
   twitter: t.String({ minLength: 1 }),
@@ -14,7 +15,7 @@ export const socials = t.Object({
 
 export const token = t.Object({
   address: t.String({ format: "address" }),
-  price: t.BigInt(),
+  price: t.Union([t.String({ format: "bigint" }), t.Number()]),
   icon: t.String({ minLength: 1 }),
   name: t.String({ minLength: 1 }),
   symbol: t.String({ minLength: 1 }),
@@ -28,14 +29,14 @@ export const launchpad = t.Object({
   autoInvestDate: t.Date(),
   unlockPercent: t.Number(),
   percents: t.Array(t.Number()),
-  times: t.Array(t.BigInt()),
-  tge: t.BigInt(),
-  cliffTime: t.BigInt(),
-  linearTime: t.BigInt(),
-  tokenOffer: t.BigInt(),
-  tokenPrice: t.BigInt(),
-  totalRaise: t.BigInt(),
-  ticketSize: t.BigInt(),
+  times: t.Array(t.Union([t.String({ format: "bigint" }), t.Number()])),
+  tge: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  cliffTime: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  linearTime: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  tokenOffer: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  tokenPrice: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  totalRaise: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  ticketSize: t.Union([t.String({ format: "bigint" }), t.Number()]),
   vestingType: t.Enum(VestingType)
 });
 
@@ -46,13 +47,13 @@ export const launchpool = t.Object({
   autoInvestDate: t.Date(),
   unlockPercent: t.Number(),
   percents: t.Array(t.Number()),
-  times: t.Array(t.BigInt()),
-  tge: t.BigInt(),
-  cliffTime: t.BigInt(),
-  linearTime: t.BigInt(),
-  tokenReward: t.BigInt(),
-  totalAirdrop: t.BigInt(),
-  vestingType: t.Enum(VestingType)
+  times: t.Array(t.Union([t.String({ format: "bigint" }), t.Number()])),
+  tge: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  cliffTime: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  linearTime: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  tokenReward: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  totalAirdrop: t.Union([t.String({ format: "bigint" }), t.Number()]),
+  vestingType: UnionEnum(Object.values(VestingType))
 });
 
 export const body = t.Object({

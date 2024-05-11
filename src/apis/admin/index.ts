@@ -16,7 +16,7 @@ export const admin = new Elysia({
     tags: ["Admin"]
   }
 })
-  .use(adminAuthPlugin)
+  //   .use(adminAuthPlugin)
   .use(changeProjectStatus)
   .use(createProject)
   .use(getIdoForms)

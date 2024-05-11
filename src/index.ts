@@ -11,6 +11,8 @@ import { errorPlugin } from "./plugins/error.plugin";
 const app = new Elysia()
   .use(
     swagger({
+      provider: "swagger-ui",
+      autoDarkMode: false,
       documentation: {
         info: {
           title: "Purr APIs documentation",

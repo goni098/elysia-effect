@@ -6,14 +6,12 @@ import {
   retrieveSaleType
 } from "@root/helpers/retrieve-launchpad-status";
 import { ProjectRepository } from "@root/repositories/project.repository";
-import { pagedParams } from "@root/shared/parser";
+import { UnionEnum, pagedParams } from "@root/shared/parser";
 
 const query = t.Composite([
   pagedParams,
   t.Object({
-    status: t.Optional(
-      t.Union([t.Literal("ongoing"), t.Literal("upcoming"), t.Literal("ended")])
-    )
+    status: t.Optional(UnionEnum(["ongoing", "upcoming", "ended"]))
   })
 ]);
 
@@ -22,7 +20,7 @@ export type GetProjectsParams = Static<typeof query>;
 export const getProjects = new Elysia({
   name: "Handler.Admin.GetProjects"
 }).get(
-  "/project/:project_id",
+  "/projects",
   async ({ query }) => {
     const [nodes, total] = await ProjectRepository.findPaged(query);
 

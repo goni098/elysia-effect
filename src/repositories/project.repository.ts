@@ -19,6 +19,8 @@ export abstract class ProjectRepository {
   }
 
   static create(payload: CreateProjectPayload) {
+    console.log("payload: ", payload);
+
     const {
       banner,
       description,
@@ -89,7 +91,7 @@ export abstract class ProjectRepository {
             startDate: startDate,
             tge: tge.toString(),
             unlockPercent,
-            vestingType: vestingType,
+            vestingType,
             percents: percents,
             times: times.map(String),
             vestingDate: vestingDate,
