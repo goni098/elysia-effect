@@ -2,8 +2,8 @@ import Elysia, { InternalServerError, t } from "elysia";
 
 import { retrieveLaunchStatus } from "@root/helpers/retrieve-launchpad-status";
 import { authPlugin } from "@root/plugins/auth.plugin";
-import { LaunchpadParticipantRepository } from "@root/repositories/launchpadParticipant.repository";
-import { LaunchpoolParticipantRepository } from "@root/repositories/launchpoolParticipant.repository";
+import { LaunchpadParticipantRepository } from "@root/repositories/launchpad-participant.repository";
+import { LaunchpoolParticipantRepository } from "@root/repositories/launchpool-participant.repository";
 import { ProjectRepository } from "@root/repositories/project.repository";
 
 export const getProject = new Elysia({

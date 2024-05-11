@@ -2,7 +2,7 @@ import { IdoStatus } from "@prisma/client";
 import type { Static } from "elysia";
 import Elysia, { t } from "elysia";
 
-import { IdoFormRepository } from "@root/repositories/idoForm.repository";
+import { IdoFormRepository } from "@root/repositories/ido-form.repository";
 import { pagedParams } from "@root/shared/parser";
 
 const query = t.Composite([

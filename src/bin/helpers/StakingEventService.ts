@@ -4,7 +4,7 @@ import type { WatchContractEventOnLogsParameter } from "viem";
 
 import type { STAKING_ABI } from "@root/contracts/staking.abi";
 import { retrieveErrorMessage } from "@root/helpers/retrieve-error";
-import { StakedPoolRepository } from "@root/repositories/stakedPool.repository";
+import { StakedPoolRepository } from "@root/repositories/staked-pool.repository";
 import { TracingRepository } from "@root/repositories/tracing.repository";
 
 export type StakeEvent = WatchContractEventOnLogsParameter<

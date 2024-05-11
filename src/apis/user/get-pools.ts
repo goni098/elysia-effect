@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 
 import { authPlugin } from "@root/plugins/auth.plugin";
-import { StakedPoolRepository } from "@root/repositories/stakedPool.repository";
+import { StakedPoolRepository } from "@root/repositories/staked-pool.repository";
 import { pagedParams } from "@root/shared/parser";
 
 export const getPools = new Elysia({

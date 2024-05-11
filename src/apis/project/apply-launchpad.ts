@@ -4,8 +4,8 @@ import { formatEther, parseEther } from "viem";
 
 import { HttpError } from "@root/errors/HttpError";
 import { authPlugin } from "@root/plugins/auth.plugin";
+import { LaunchpadParticipantRepository } from "@root/repositories/launchpad-participant.repository";
 import { LaunchpadRepository } from "@root/repositories/launchpad.repository";
-import { LaunchpadParticipantRepository } from "@root/repositories/launchpadParticipant.repository";
 import { DepositContractService } from "@root/services/contracts/DepositContractService";
 import { StakingContractService } from "@root/services/contracts/StakingContractService";
 

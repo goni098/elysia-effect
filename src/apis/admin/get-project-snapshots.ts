@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 
-import { LaunchpadSnapshotRepository } from "@root/repositories/launchpadSnapshot.repository";
-import { VestingPoolRepository } from "@root/repositories/vestingPool.repository";
+import { LaunchpadSnapshotRepository } from "@root/repositories/launchpad-snapshot.repository";
+import { VestingPoolRepository } from "@root/repositories/vesting-pool.repository";
 
 export const getProjectSnapshots = new Elysia({
   name: "Handler.Admin.GetProjectSnapshots"

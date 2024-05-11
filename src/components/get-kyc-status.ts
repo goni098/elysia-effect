@@ -1,7 +1,7 @@
 import { KycStatus } from "@prisma/client";
 import type { Address } from "viem";
 
-import { KycVeriffSessionRepository } from "@root/repositories/kycVeriffSession.repositoty";
+import { KycVeriffSessionRepository } from "@root/repositories/kyc-veriff-session.repositoty";
 
 export const getKycStatus = async (address: Address) => {
   const kycVeriffSession =

@@ -5,7 +5,7 @@ import type { VESTING_ABI } from "@root/contracts/vesting.abi";
 import { retrieveErrorMessage } from "@root/helpers/retrieve-error";
 import { TracingRepository } from "@root/repositories/tracing.repository";
 import { TransactionRepository } from "@root/repositories/transaction.repository";
-import { VestingPoolRepository } from "@root/repositories/vestingPool.repository";
+import { VestingPoolRepository } from "@root/repositories/vesting-pool.repository";
 
 export type CreateVestingPoolEvent = WatchContractEventOnLogsParameter<
   typeof VESTING_ABI,

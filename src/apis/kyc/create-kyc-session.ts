@@ -2,7 +2,7 @@ import { KycStatus } from "@prisma/client";
 import Elysia from "elysia";
 
 import { authPlugin } from "@root/plugins/auth.plugin";
-import { KycVeriffSessionRepository } from "@root/repositories/kycVeriffSession.repositoty";
+import { KycVeriffSessionRepository } from "@root/repositories/kyc-veriff-session.repositoty";
 import { createKycVeriffSession } from "@root/services/veriff/create-kyc-veriff-session";
 
 export const createKycSession = new Elysia({

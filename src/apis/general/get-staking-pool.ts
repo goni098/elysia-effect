@@ -1,6 +1,6 @@
 import Elysia from "elysia";
 
-import { StakedPoolRepository } from "@root/repositories/stakedPool.repository";
+import { StakedPoolRepository } from "@root/repositories/staked-pool.repository";
 import { StakingContractService } from "@root/services/contracts/StakingContractService";
 
 export const getStakingPool = new Elysia({

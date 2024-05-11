@@ -2,7 +2,7 @@ import { KycStatus } from "@prisma/client";
 import Elysia, { t } from "elysia";
 
 import { authorizeVeriffDecisionWebhookPlugin } from "@root/plugins/authorize-veriff-decision-webhook";
-import { KycVeriffSessionRepository } from "@root/repositories/kycVeriffSession.repositoty";
+import { KycVeriffSessionRepository } from "@root/repositories/kyc-veriff-session.repositoty";
 import { VERIFF_KYC_STATUS_BY_VERIFF_CODE } from "@root/shared/constant";
 
 export const decision = new Elysia({

@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 
 import { authPlugin } from "@root/plugins/auth.plugin";
-import { LaunchpadSnapshotRepository } from "@root/repositories/launchpadSnapshot.repository";
+import { LaunchpadSnapshotRepository } from "@root/repositories/launchpad-snapshot.repository";
 import { TransactionRepository } from "@root/repositories/transaction.repository";
 import { pagedParams } from "@root/shared/parser";
 

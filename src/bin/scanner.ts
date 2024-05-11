@@ -64,6 +64,8 @@ async function scan(blockNumber: bigint) {
     toBlock: latestBlock.number
   });
 
+  console.log("events: ", events.length);
+
   const tasks: Array<Promise<void>> = [];
 
   events.forEach(event => {

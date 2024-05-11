@@ -2,9 +2,9 @@ import Elysia, { t } from "elysia";
 
 import { HttpError } from "@root/errors/HttpError";
 import { authPlugin } from "@root/plugins/auth.plugin";
+import { LaunchpadSnapshotRepository } from "@root/repositories/launchpad-snapshot.repository";
 import { LaunchpadRepository } from "@root/repositories/launchpad.repository";
-import { LaunchpadSnapshotRepository } from "@root/repositories/launchpadSnapshot.repository";
-import { VestingPoolRepository } from "@root/repositories/vestingPool.repository";
+import { VestingPoolRepository } from "@root/repositories/vesting-pool.repository";
 
 export const getLaunchpadVestingPeriod = new Elysia({
   name: "Handler.User.GetLaunchpadVestingPeriod"

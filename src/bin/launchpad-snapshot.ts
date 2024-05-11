@@ -1,15 +1,17 @@
 import { DateTime } from "luxon";
 import { parseEther } from "viem";
 
+import { LaunchpadParticipantRepository } from "@root/repositories/launchpad-participant.repository";
+import { LaunchpadSnapshotRepository } from "@root/repositories/launchpad-snapshot.repository";
 import { LaunchpadRepository } from "@root/repositories/launchpad.repository";
-import { LaunchpadParticipantRepository } from "@root/repositories/launchpadParticipant.repository";
-import { LaunchpadSnapshotRepository } from "@root/repositories/launchpadSnapshot.repository";
 import { DepositContractService } from "@root/services/contracts/DepositContractService";
 import { sleep } from "@root/utils/sleep";
 
 async function run() {
   while (true) {
     const launchpads = await LaunchpadRepository.findAllSnapshotDateReached();
+
+    console.log("launchpads: ", launchpads.length);
 
     if (!launchpads.length) {
       await sleep(3000);
@@ -48,4 +50,4 @@ async function run() {
   }
 }
 
-run();
+await run();
